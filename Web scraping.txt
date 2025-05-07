@@ -1,0 +1,20 @@
+import requests
+from bs4 import BeautifulSoup
+
+url = "https://www.amazon.in/s?k=apple"
+
+# Add user-agent header to mimic a real browser
+headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+}
+
+response = requests.get(url, headers=headers)
+response.raise_for_status()
+
+soup = BeautifulSoup(response.text, 'html.parser')
+
+titles = soup.find_all('h2', class_='a-size-medium')
+prices = soup.find_all('span', class_='a-price-whole')
+
+for title,price in zip(titles,prices):  # print top 10 titles
+    print("Product Name :- "+ title.getText()+" Price :- "+price.getText())
